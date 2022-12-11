@@ -156,7 +156,7 @@ app.action("button_click", async ({ack, say}) => {
     await show(say, result);
 
     result.attachments[0].fields[0].value = '';
-    result.attachments[1].fields[1].value = '';
+    result.attachments[1].fields[0].value = '';
 
     isTesting = false;
 });
