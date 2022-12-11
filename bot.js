@@ -73,10 +73,13 @@ const app = new App({
     appToken: CONFIG.TEST_XAPP,
 });
 
-app.message(async ({ event}) => {
+app.message(async ({ event, payload}) => {
     const {user, text} = event;
+    console.log(event);
+    console.log(payload);
 
     console.assert(user === CONFIG.MAIN_ID, 'only receive main bot\'s message');
+
 
     switch (testLevel) {
         case 'greeting':
@@ -109,7 +112,7 @@ app.message(async ({ event}) => {
             testLevel = "dept";
             break;
         case "dept":
-            check(text === `| 학과 이름을 입력해주세요 \n| (⨂ 영문입력 바람)`, '');
+            check(text !== null , '');
             testLevel = "dept_invalid";
             break;
         case 'dept_invalid':
@@ -161,7 +164,7 @@ app.action("button_click", async ({ ack, say}) => {
     console.log("⚡️ Bolt app is running!");
 })();
 
-async function show(callback, msg) {
-    await callback(msg);
+async function show(say, msg) {
+    await say(msg);
     await sleep(1500);
 }
