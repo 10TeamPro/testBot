@@ -73,13 +73,14 @@ const app = new App({
     appToken: CONFIG.TEST_XAPP,
 });
 
-app.message(async ({ event, payload}) => {
+app.message(async ({event, payload}) => {
     const {user, text} = event;
-    console.log(event);
-    console.log(payload);
+    // console.log(event);
+    // console.log(payload);
 
     console.assert(user === CONFIG.MAIN_ID, 'only receive main bot\'s message');
-
+    if (!isTesting)
+        return;
 
     switch (testLevel) {
         case 'greeting':
@@ -112,7 +113,7 @@ app.message(async ({ event, payload}) => {
             testLevel = "dept";
             break;
         case "dept":
-            check(text !== null , '');
+            check(text !== null, '');
             testLevel = "dept_invalid";
             break;
         case 'dept_invalid':
@@ -132,7 +133,7 @@ app.command("/test", async ({ack, say}) => {
     await say(btn);
 });
 
-app.action("button_click", async ({ ack, say}) => {
+app.action("button_click", async ({ack, say}) => {
 
     if (isTesting)
         return;
@@ -152,9 +153,10 @@ app.action("button_click", async ({ ack, say}) => {
     await show(say, "Computer Science and Engineering");
 
 
-    await say(result);
+    await show(say, result);
 
     result.attachments[0].fields[0].value = '';
+    result.attachments[1].fields[1].value = '';
 
     isTesting = false;
 });
